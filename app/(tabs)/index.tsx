@@ -1,6 +1,7 @@
+import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import React from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity } from 'react-native';
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -10,7 +11,12 @@ export default function HomeScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <LinearGradient
+      colors={['#2874a6', '#aed6f1', '#ffffff']}
+      style={styles.container}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 1 }}
+    >
       <Image
         source={require('@/assets/images/logo.png')}
         style={styles.logo}
@@ -20,7 +26,7 @@ export default function HomeScreen() {
       <TouchableOpacity style={styles.button} onPress={navigateToCamera}>
         <Text style={styles.buttonText}>INICIO</Text>
       </TouchableOpacity>
-    </View>
+    </LinearGradient>
   );
 }
 
@@ -30,7 +36,6 @@ const styles = StyleSheet.create({
     padding: 24,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#f7f9fc',
   },
   logo: {
     width: 240,
@@ -41,7 +46,7 @@ const styles = StyleSheet.create({
     width: 130,
     height: 130,
     borderRadius: 65,
-    backgroundColor: '#2980b9',
+    backgroundColor: '#1f618d',
     alignItems: 'center',
     justifyContent: 'center',
     elevation: 6,
@@ -56,5 +61,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
+
+
+
 
 

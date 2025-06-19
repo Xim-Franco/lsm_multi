@@ -15,7 +15,7 @@ export default function TabLayout() {
           } else if (route.name === 'camera') {
             iconName = 'camera';
           } else if (route.name === 'history') {
-            iconName = 'time'; // equivalente al ícono de historial
+            iconName = 'time'; 
           }
 
           return <Ionicons name={iconName} size={size} color={color} />;

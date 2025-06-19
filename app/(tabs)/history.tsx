@@ -39,7 +39,7 @@ export default function HistoryScreen() {
       />
 
       <View style={styles.actions}>
-        <Button title="Borrar todo" color="#c0392b" onPress={clearAll} />
+        <Button title="Borrar todo" color="#922b21" onPress={clearAll} />
       </View>
 
       <TouchableOpacity style={styles.fab} onPress={removeLastItem}>
@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 40,
     paddingHorizontal: 16,
-    backgroundColor: '#f7f9fc',
+    backgroundColor: '#d6eaf8',
   },
   header: {
     fontSize: 26,

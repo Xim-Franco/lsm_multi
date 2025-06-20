@@ -1,24 +1,47 @@
-import React from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { CameraView, useCameraPermissions } from 'expo-camera';
+import React, { useEffect, useRef } from 'react';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 export default function CameraScreen() {
+  const [permission, requestPermission] = useCameraPermissions();
+  const cameraRef = useRef<any>(null); // <--- tipado flexible por compatibilidad
+
+  useEffect(() => {
+    if (!permission) {
+      requestPermission();
+    }
+  }, [permission, requestPermission]);
+
+  const captureImage = async () => {
+    if (cameraRef.current) {
+      const photo = await cameraRef.current.takePictureAsync();
+      console.log('Foto capturada:', photo.uri);
+    }
+  };
+
+  if (!permission?.granted) {
+    return (
+      <View style={styles.loading}>
+        <Text>Solicitando permisos...</Text>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Captura de imagen</Text>
 
       <View style={styles.card}>
-        {/* vista de la cámara */}
-        <Image
-          source={require('@/assets/images/app.png')}
-          style={styles.image}
-          resizeMode="cover"
+        <CameraView
+          style={styles.camera}
+          facing="back"
+          ref={cameraRef}
         />
       </View>
 
       <Text style={styles.result}>Letra reconocida: A</Text>
 
-      {/* FAB como botón de captura */}
-      <TouchableOpacity style={styles.captureButton} onPress={() => console.log('Capturar imagen')} />
+      <TouchableOpacity style={styles.captureButton} onPress={captureImage} />
     </View>
   );
 }
@@ -30,6 +53,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     backgroundColor: '#d6eaf8',
     alignItems: 'center',
+  },
+  loading: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#d6eaf8',
   },
   header: {
     fontSize: 26,
@@ -50,20 +79,20 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     elevation: 2,
   },
-  image: {
+  camera: {
     width: '100%',
     height: '100%',
   },
   result: {
     marginTop: 24,
-    marginBottom: 80, // deja espacio para el FAB
+    marginBottom: 80,
     fontSize: 18,
     fontWeight: '500',
     color: '#34495e',
   },
   captureButton: {
     position: 'absolute',
-    bottom: 10, // separación del borde inferior
+    bottom: 10,
     alignSelf: 'center',
     width: 60,
     height: 60,
@@ -76,8 +105,11 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.15,
     shadowRadius: 6,
     shadowOffset: { width: 0, height: 3 },
-  },  
+  },
 });
+
+
+
 
 
 

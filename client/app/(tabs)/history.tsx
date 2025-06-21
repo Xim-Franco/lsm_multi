@@ -1,16 +1,20 @@
-import HistoryRepository from '@/services/HistoryRepository';
+import HistoryRepository from '@/services/HistoryRepository'; // repositorio donde se almacena el historial
 import { Ionicons } from '@expo/vector-icons';
 import React, { useEffect, useState } from 'react';
 import { Button, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 export default function HistoryScreen() {
+  // Estado local pa guardar los elementos del historial
   const [items, setItems] = useState<string[]>([]);
 
+  // cuando se usa el componente, se obtiene el historial almacenado y se carga en el estado
   useEffect(() => {
     const history = HistoryRepository.getHistory();
     setItems(history);
   }, []);
 
+
+  // Elimina el último elemento del historial
   const removeLastItem = () => {
     const updated = [...items];
     updated.pop();
@@ -18,11 +22,13 @@ export default function HistoryScreen() {
     HistoryRepository.setHistory(updated);
   };
 
+  // Elimina todos los elementos del historial
   const clearAll = () => {
     setItems([]);
     HistoryRepository.clearHistory();
   };
 
+  // Renderiza la pantalla
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Historial</Text>
@@ -49,6 +55,7 @@ export default function HistoryScreen() {
   );
 }
 
+// Estilos
 const styles = StyleSheet.create({
   container: {
     flex: 1,

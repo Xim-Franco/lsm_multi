@@ -1,11 +1,12 @@
-import { LinearGradient } from 'expo-linear-gradient';
+import { LinearGradient } from 'expo-linear-gradient'; // Pa fondo con degradado
 import { useRouter } from 'expo-router';
 import React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity } from 'react-native';
 
 export default function HomeScreen() {
-  const router = useRouter();
+  const router = useRouter(); // Hook para manejar navegación
 
+  // navega a la pantalla de la cámara
   const navigateToCamera = () => {
     router.push('/camera');
   };
@@ -30,6 +31,7 @@ export default function HomeScreen() {
   );
 }
 
+// Estilos
 const styles = StyleSheet.create({
   container: {
     flex: 1,

@@ -1,0 +1,31 @@
+# Bytecode y cachés de Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Archivos de entorno virtual
+venv/
+.env
+
+# Archivos temporales y logs
+*.log
+*.tmp
+*.swp
+
+# Archivos específicos de TensorFlow Lite
+*.tflite
+imagen_recibida.jpg
+entrada_modelo.jpg
+
+# IDEs y editores
+.vscode/
+.idea/
+
+# Archivos de pruebas
+*.test.*
+*.bak
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db

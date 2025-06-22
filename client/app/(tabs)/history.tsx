@@ -7,20 +7,23 @@ export default function HistoryScreen() {
   const [items, setItems] = useState<string[]>([]);
 
   useEffect(() => {
-    const history = HistoryRepository.getHistory();
-    setItems(history);
+    const load = async () => {
+      const history = await HistoryRepository.getHistory();
+      setItems(history);
+    };
+    load();
   }, []);
 
-  const removeLastItem = () => {
+  const removeLastItem = async () => {
     const updated = [...items];
     updated.pop();
     setItems(updated);
-    HistoryRepository.setHistory(updated);
+    await HistoryRepository.setHistory(updated);
   };
 
-  const clearAll = () => {
+  const clearAll = async () => {
     setItems([]);
-    HistoryRepository.clearHistory();
+    await HistoryRepository.clearHistory();
   };
 
   return (

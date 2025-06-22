@@ -1,20 +1,39 @@
-// services/HistoryRepository.ts
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-let historyList: string[] = [];
+const STORAGE_KEY = "history_lsm";
 
 const HistoryRepository = {
-  getHistory: (): string[] => {
-    return historyList;
+  async getHistory(): Promise<string[]> {
+    try {
+      const raw = await AsyncStorage.getItem(STORAGE_KEY);
+      return raw ? JSON.parse(raw) : [];
+    } catch (error) {
+      console.error("Error al obtener historial:", error);
+      return [];
+    }
   },
-  addItem: (item: string) => {
-    historyList.push(item);
+
+  async setHistory(data: string[]) {
+    try {
+      await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    } catch (error) {
+      console.error("Error al guardar historial:", error);
+    }
   },
-  clearHistory: () => {
-    historyList = [];
+
+  async addToHistory(item: string) {
+    const current = await HistoryRepository.getHistory();
+    current.push(item);
+    await HistoryRepository.setHistory(current);
   },
-  setHistory: (newList: string[]) => {
-    historyList = [...newList];
-  },
+
+  async clearHistory() {
+    try {
+      await AsyncStorage.removeItem(STORAGE_KEY);
+    } catch (error) {
+      console.error("Error al borrar historial:", error);
+    }
+  }
 };
 
 export default HistoryRepository;

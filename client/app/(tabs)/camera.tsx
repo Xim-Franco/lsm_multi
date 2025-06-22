@@ -1,11 +1,15 @@
 import { CameraView, useCameraPermissions } from 'expo-camera';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import HistoryRepository from '@/services/HistoryRepository';
+
+const API_URL = "http://192.168.1.73:8000/predict";
 
 export default function CameraScreen() {
   const [permission, requestPermission] = useCameraPermissions();
   const cameraRef = useRef<any>(null); // <--- tipado flexible por compatibilidad
-
+  const [letraReconocida, setLetraReconocida] = useState<string | null>(null);
+  
   useEffect(() => {
     if (!permission) {
       requestPermission();
@@ -14,8 +18,49 @@ export default function CameraScreen() {
 
   const captureImage = async () => {
     if (cameraRef.current) {
-      const photo = await cameraRef.current.takePictureAsync();
+      const photo = await cameraRef.current.takePictureAsync({base64: false});
       console.log('Foto capturada:', photo.uri);
+      const letra = await enviarImagen(photo.uri);
+      if (letra) {
+        setLetraReconocida(letra);
+        await HistoryRepository.addToHistory(letra);
+      }
+      setLetraReconocida(letra);
+      console.log('Letra reconocida:', letra);
+    }
+  };
+
+  const enviarImagen = async (uri: string): Promise<string | null> => {
+    const formData = new FormData();
+    formData.append("file", {
+      uri,
+      name: "imagen.jpg",
+      type: "image/jpeg",
+    } as any);
+
+    try {
+      const response = await fetch(API_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        body: formData,
+      });
+
+      const json = await response.json();
+      const clase = json.prediction;
+
+      const clasesLSM = [
+        "a", "b", "c", "d", "e", "f", "g", "h", "i",
+        "l", "m", "n", "o", "p", "q", "r", "s", "t",
+        "u", "v", "w", "x", "y", "z"
+      ];
+
+      const letra = clasesLSM[clase] ?? "?";
+      return letra;
+    } catch (error) {
+      console.error("Error enviando imagen:", error);
+      return null;
     }
   };
 
@@ -39,7 +84,7 @@ export default function CameraScreen() {
         />
       </View>
 
-      <Text style={styles.result}>Letra reconocida: A</Text>
+      <Text style={styles.result}>Letra reconocida: {letraReconocida ?? "Ninguna"}</Text>
 
       <TouchableOpacity style={styles.captureButton} onPress={captureImage} />
     </View>

@@ -1,3 +1,4 @@
+// módulos para usar la cámara y construir la interfaz
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import React, { useEffect, useRef, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
@@ -6,16 +7,22 @@ import HistoryRepository from '@/services/HistoryRepository';
 const API_URL = "http://192.168.1.73:8000/predict";
 
 export default function CameraScreen() {
+  // Estado y función para los permisos de la cámara
   const [permission, requestPermission] = useCameraPermissions();
-  const cameraRef = useRef<any>(null); // <--- tipado flexible por compatibilidad
   const [letraReconocida, setLetraReconocida] = useState<string | null>(null);
   
+  // referencia a la cámara para poder llamar métodos como takePictureAsync()
+  const cameraRef = useRef<any>(null);
+  
+  // Solicita permisos
   useEffect(() => {
     if (!permission) {
       requestPermission();
     }
   }, [permission, requestPermission]);
 
+  // Se ejecuta al presionar el botón de captura
+  // toma la foto desde la cámara y muestra la URI en consola
   const captureImage = async () => {
     if (cameraRef.current) {
       const photo = await cameraRef.current.takePictureAsync({base64: false});
@@ -63,7 +70,8 @@ export default function CameraScreen() {
       return null;
     }
   };
-
+  
+  // Si los permisos no están concedidos se muestra un mensaje de espera
   if (!permission?.granted) {
     return (
       <View style={styles.loading}>
@@ -72,6 +80,7 @@ export default function CameraScreen() {
     );
   }
 
+  // Renderiza la pantalla
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Captura de imagen</Text>
@@ -91,6 +100,7 @@ export default function CameraScreen() {
   );
 }
 
+// Estilos
 const styles = StyleSheet.create({
   container: {
     flex: 1,

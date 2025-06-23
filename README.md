@@ -34,7 +34,7 @@ La aplicación integra un modelo de redes neuronales profundas, el cual fue entr
 
 1. Clona el repositorio:  
    ```bash
-   git clone 
+   git clone https://github.com/Xim-Franco/lsm_multi.git
 2. Instala las dependencias: npm install
 3. Inicia el proyecto con Expo: npx expo start
 4. Abre la app en un emulador o dispositivo físico usando la app de Expo Go.

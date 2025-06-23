@@ -12,7 +12,7 @@ def load_model(model_path):
 
 def preprocess_image(image: Image.Image):
     
-    print("🔧 Procesando imagen...")
+    print("Procesando imagen...")
 
     # Redimensionar más grande antes de binarizar (por calidad)
     image = image.resize((200, 200))
